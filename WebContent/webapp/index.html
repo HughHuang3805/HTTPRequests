@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<body>
+
+<div ng-app="sampleApp" ng-controller = "sampleController as controller ">
+ 
+<p>Input something in the box:</p>
+<p>Name: <input type="text" ng-model="data"></p>
+<p>Favorite City: <input type="text" ng-model="data"></p>
+<p ng-repeat="person in data">{{person}}</p>
+<button>Post</button>
+
+</div>
+<script>
+
+(function(angular) {
+	  'use strict';
+	angular.module('sampleApp', [])
+	.controller('sampleController', ['$scope', '$http', '$templateCache',
+	    function($scope, $http, $templateCache) {
+	      $scope.method = 'GET';
+	      $scope.url = 'http-hello.html';
+
+	      
+
+        $http({method: 'GET', url: '/people'}).
+          then(function(response) {
+            $scope.data = response.data;
+            console.log("get person");
+          }, function(response) {
+            $scope.status = response.status;
+        });
+        
+        $http({method: 'POST', url: '/people', data:{id:1, name:'Xiaoke', favoriteCity:'New York'}}).
+	        then(function(response) {
+	          $scope.data = response.data;
+	          console.log("create person");
+	        }, function(response) {
+	          $scope.status = response.status;
+	      }); 
+        
+        $http({method: 'PUT', url: '/people', data:{id:1, name:'Xiaoke', favoriteCity:'New York'}}).
+	        then(function(response) {
+	          $scope.data = response.data;
+	          console.log("edit person");
+	        }, function(response) {
+	          $scope.status = response.status;
+	      }); 
+        
+        $http({method: 'DELETE', url: '/people/1'}).
+	        then(function(response) {
+	          $scope.data = response.data;
+	          console.log("delete person");
+	        }, function(response) {
+	          $scope.status = response.status;
+	      }); 
+
+	      $scope.updateModel = function(method, url) {
+	        $scope.method = method;
+	        $scope.url = url;
+	      };
+	    }]);
+	})(window.angular);
+	
+	
+</script>
+
+</body>
+</html>
+ 
